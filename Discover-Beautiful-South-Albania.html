@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover South Albania - The Hidden Gem of Europe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E88E5',
+                        secondary: '#26A69A',
+                        accent: '#FFA726',
+                        neutral: '#F5F7FA'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '4px',
+                        DEFAULT: '8px',
+                        'md': '12px',
+                        'lg': '16px',
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                        'full': '9999px',
+                        'button': '8px'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :where([class^="ri-"])::before { 
+            content: "\f3c2"; 
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .hero-section {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://readdy.ai/api/search-image?query=Stunning%20panoramic%20aerial%20view%20of%20the%20Albanian%20Riviera%20coastline%20with%20crystal%20clear%20turquoise%20waters%2C%20white%20sandy%20beaches%2C%20and%20dramatic%20mountains%20in%20the%20background.%20Golden%20sunlight%20illuminating%20the%20Mediterranean%20landscape%2C%20creating%20a%20paradise-like%20atmosphere%20with%20small%20coastal%20villages%20nestled%20between%20cliffs&width=1920&height=1080&seq=1&orientation=landscape');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .city-card:hover .city-overlay {
+            opacity: 0.9;
+        }
+        
+        .city-card:hover .city-details {
+            transform: translateY(0);
+        }
+        
+        .attraction-carousel {
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .attraction-carousel::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .custom-checkbox {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+        }
+        
+        .custom-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #fff;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .custom-checkbox:hover input ~ .checkmark {
+            border-color: #ccc;
+        }
+        
+        .custom-checkbox input:checked ~ .checkmark {
+            background-color: #1E88E5;
+            border-color: #1E88E5;
+        }
+        
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        
+        .custom-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+        
+        .custom-checkbox .checkmark:after {
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Header Section -->
+    <header class="hero-section relative h-screen flex items-center">
+        <div class="absolute top-0 left-0 right-0 z-10">
+            <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <a href="#" class="text-white text-3xl font-['Pacifico']">Discover Albania</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-white hover:text-primary transition-colors">Home</a>
+                    <a href="#cities" class="text-white hover:text-primary transition-colors">Cities</a>
+                    <a href="#attractions" class="text-white hover:text-primary transition-colors">Attractions</a>
+                    <a href="#experiences" class="text-white hover:text-primary transition-colors">Experiences</a>
+                    <a href="#map" class="text-white hover:text-primary transition-colors">Map</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search destinations..." class="bg-white/20 text-white placeholder-white/70 border-none rounded-full py-2 px-4 pr-10 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <div class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
+                            <i class="ri-search-line text-white"></i>
+                        </div>
+                    </div>
+                    <button class="bg-primary text-white px-6 py-2 !rounded-button whitespace-nowrap hover:bg-primary/90 transition-colors">Book Now</button>
+                </div>
+            </nav>
+        </div>
+        
+        <div class="container mx-auto px-6 z-10">
+            <div class="max-w-2xl">
+                <h1 class="text-5xl md:text-6xl font-bold text-white leading-tight mb-6">Experience the Hidden Gem of Europe</h1>
+                <p class="text-xl text-white/90 mb-8">Discover the untouched beauty of South Albania, where pristine beaches meet ancient history and authentic Mediterranean culture.</p>
+                <div class="flex flex-wrap gap-4">
+                    <button class="bg-primary text-white px-8 py-3 font-medium !rounded-button whitespace-nowrap hover:bg-primary/90 transition-colors">Explore Destinations</button>
+                    <button class="bg-white text-gray-800 px-8 py-3 font-medium !rounded-button whitespace-nowrap hover:bg-gray-100 transition-colors">Watch Video</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Introduction Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6">Why South Albania?</h2>
+                <p class="text-lg text-gray-600">South Albania offers a perfect blend of Mediterranean beauty, rich history, and authentic culture. From UNESCO World Heritage sites to pristine beaches and mouthwatering cuisine, this undiscovered paradise has something for every traveler.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-48 h-48 rounded-full overflow-hidden mb-6">
+                        <img src="https://readdy.ai/api/search-image?query=Authentic%20Albanian%20cultural%20experience%20with%20traditional%20folk%20dancers%20in%20colorful%20costumes%20performing%20in%20a%20historic%20village%20square.%20Old%20stone%20buildings%20in%20the%20background%2C%20locals%20and%20tourists%20watching%20the%20performance%20with%20joy.%20Warm%20evening%20light%2C%20festive%20atmosphere&width=400&height=400&seq=2&orientation=squarish" alt="Albanian Culture" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">Rich Culture</h3>
+                    <p class="text-gray-600">Experience centuries-old traditions, authentic festivals, and warm hospitality from locals who welcome visitors with open arms.</p>
+                </div>
+                
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-48 h-48 rounded-full overflow-hidden mb-6">
+                        <img src="https://readdy.ai/api/search-image?query=Breathtaking%20natural%20landscape%20of%20South%20Albania%20with%20crystal%20clear%20turquoise%20waters%20of%20the%20Ionian%20Sea%2C%20white%20sandy%20beaches%20surrounded%20by%20dramatic%20cliffs%20and%20lush%20Mediterranean%20vegetation.%20Perfect%20sunny%20day%20with%20blue%20sky%2C%20no%20people%2C%20pristine%20untouched%20nature&width=400&height=400&seq=3&orientation=squarish" alt="Albanian Nature" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">Stunning Nature</h3>
+                    <p class="text-gray-600">From the crystal-clear waters of the Albanian Riviera to the dramatic mountains and pristine national parks, nature lovers will be in paradise.</p>
+                </div>
+                
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-48 h-48 rounded-full overflow-hidden mb-6">
+                        <img src="https://readdy.ai/api/search-image?query=Traditional%20Albanian%20cuisine%20spread%20on%20a%20rustic%20wooden%20table%20with%20Mediterranean%20dishes%20including%20fresh%20seafood%2C%20grilled%20vegetables%2C%20olive%20oil%2C%20feta%20cheese%2C%20and%20local%20wines.%20Authentic%20presentation%20with%20ceramic%20plates%2C%20overlooking%20coastal%20view%2C%20warm%20lighting&width=400&height=400&seq=4&orientation=squarish" alt="Albanian Cuisine" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">Delicious Cuisine</h3>
+                    <p class="text-gray-600">Savor the flavors of authentic Mediterranean cuisine with fresh seafood, organic produce, and traditional recipes passed down through generations.</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <button class="bg-primary text-white px-8 py-3 font-medium !rounded-button whitespace-nowrap hover:bg-primary/90 transition-colors">Explore More</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Cities Grid -->
+    <section id="cities" class="py-20 bg-neutral">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6">Discover Southern Cities</h2>
+                <p class="text-lg text-gray-600">Explore the charming cities and towns of South Albania, each with its own unique character, history, and attractions.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Vlora -->
+                <div class="city-card rounded-lg overflow-hidden shadow-lg bg-white transition-all duration-300 hover:shadow-xl">
+                    <div class="relative h-64">
+                        <img src="https://readdy.ai/api/search-image?query=Aerial%20view%20of%20Vlora%20city%20in%20Albania%20with%20beautiful%20coastline%2C%20turquoise%20Adriatic%20Sea%2C%20urban%20landscape%20with%20modern%20buildings%20and%20historic%20architecture%2C%20mountains%20in%20background%2C%20sunny%20day%20with%20clear%20blue%20sky&width=600&height=400&seq=5&orientation=landscape" alt="Vlora" class="w-full h-full object-cover">
+                        <div class="city-overlay absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70 transition-opacity duration-300"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-1">Vlora</h3>
+                            <p class="text-sm">Where the Adriatic meets the Ionian Sea</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">Albania's second largest port city offers beautiful beaches, rich history, and serves as the perfect gateway to the Albanian Riviera.</p>
+                        <button class="bg-primary text-white px-6 py-2 !rounded-button whitespace-nowrap hover:bg-primary/90 transition-colors">View Details</button>
+                    </div>
+                </div>
+                
+                <!-- Saranda -->
+                <div class="city-card rounded-lg overflow-hidden shadow-lg bg-white transition-all duration-300 hover:shadow-xl">
+                    <div class="relative h-64">
+                        <img src="https://readdy.ai/api/search-image?query=Panoramic%20view%20of%20Saranda%20city%20in%20Albania%20with%20beautiful%20bay%2C%20turquoise%20Ionian%20Sea%2C%20coastal%20promenade%20with%20palm%20trees%2C%20hillside%20buildings%2C%20yachts%20in%20harbor%2C%20perfect%20summer%20destination%2C%20sunny%20day&width=600&height=400&seq=6&orientation=landscape" alt="Saranda" class="w-full h-full object-cover">
+                        <div class="city-overlay absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70 transition-opacity duration-300"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-1">Saranda</h3>
+                            <p class="text-sm">The pearl of the Albanian Riviera</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">This coastal gem offers stunning beaches, vibrant nightlife, and easy access to ancient ruins, including the UNESCO World Heritage site of Butrint.</p>
+                        <button class="bg-primary text-white px-6 py-2 !rounded-button whitespace-nowrap hover:bg-primary/90 transition-colors">View Details</button>
+                    </div>
+                </div>
+                
+                <!-- Gjirokastra -->
+                <div class="city-card rounded-lg overflow-hidden shadow-lg bg-white transition-all duration-300 hover:shadow-xl">
+                    <div class="relative h-64">
+                        <img src="https://readdy.ai/api/search-image?query=Historic%20UNESCO%20World%20Heritage%20city%20of%20Gjirokastra%20in%20Albania%20with%20traditional%20Ottoman%20stone%20houses%20with%20slate%20roofs%20cascading%20down%20hillside%2C%20ancient%20castle%20fortress%20on%20top%2C%20cobblestone%20streets%2C%20dramatic%20mountain%20backdrop%2C%20authentic%20architecture&width=600&height=400&seq=7&orientation=landscape" alt="Gjirokastra" class="w-full h-full object-cover">
+                        <div class="city-overlay absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70 transition-opacity duration-300"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-1">Gjirokastra</h3>
+                            <p class="text-sm">The city of stone</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">This UNESCO World Heritage site features unique Ottoman architecture with stone houses, a magnificent castle, and rich cultural heritage.</p>
+                        <button class="bg-primary text-white px-6 py-2 !rounded-button whitespace-nowrap hover:bg-primary/90 transition-colors">View Details</button>
+                    </div>
+                </div>
+                
+                <!-- Himara -->
+                <div class="city-card rounded-lg overflow-hidden shadow-lg bg-white transition-all duration-300 hover:shadow-xl">
+                    <div class="relative h-64">
+                        <img src="https://readdy.ai/api/search-image?query=Beautiful%20coastal%20town%20of%20Himara%20in%20Albania%20with%20pristine%20beaches%2C%20crystal%20clear%20turquoise%20waters%2C%20traditional%20Mediterranean%20village%20with%20white%20houses%20on%20hillside%2C%20olive%20groves%2C%20small%20fishing%20boats%2C%20perfect%20summer%20destination&width=600&height=400&seq=8&orientation=landscape" alt="Himara" class="w-full h-full object-cover">
+                        <div class="city-overlay absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70 transition-opacity duration-300"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-1">Himara</h3>
+                            <p class="text-sm">Coastal paradise with Greek heritage</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">A charming coastal town with beautiful beaches, traditional villages, and a unique blend of Albanian and Greek cultural influences.</p>
+                        <button class="bg-primary text-white px-6 py-2 !rounded-button whitespace-nowrap hover:bg-primary/90 transition-colors">View Details</button>
+                    </div>
+                </div>
+                
+                <!-- Berat -->
+                <div class="city-card rounded-lg overflow-hidden shadow-lg bg-white transition-all duration-300 hover:shadow-xl">
+                    <div class="relative h-64">
+                        <img src="https://readdy.ai/api/search-image?query=UNESCO%20World%20Heritage%20city%20of%20Berat%20in%20Albania%20known%20as%20the%20City%20of%20a%20Thousand%20Windows%20with%20white%20Ottoman%20houses%20with%20many%20windows%20built%20on%20hillside%2C%20ancient%20castle%20on%20top%2C%20Osum%20river%20flowing%20through%2C%20historic%20architecture%2C%20sunset%20golden%20light&width=600&height=400&seq=9&orientation=landscape" alt="Berat" class="w-full h-full object-cover">
+                        <div class="city-overlay absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70 transition-opacity duration-300"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-1">Berat</h3>
+                            <p class="text-sm">The city of a thousand windows</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">This UNESCO World Heritage site features a well-preserved Ottoman old town with white houses cascading down the hillside and a magnificent castle.</p>
+                        <button class="bg-primary text-white px-6 py-2 !rounded-button whitespace-nowrap hover:bg-primary/90 transition-colors">View Details</button>
+                    </div>
+                </div>
+                
+                <!-- Permet -->
+                <div class="city-card rounded-lg overflow-hidden shadow-lg bg-white transition-all duration-300 hover:shadow-xl">
+                    <div class="relative h-64">
+                        <img src="https://readdy.ai/api/search-image?query=Picturesque%20town%20of%20Permet%20in%20Albania%20with%20traditional%20stone%20houses%2C%20surrounded%20by%20dramatic%20mountains%20and%20lush%20green%20valleys%2C%20Vjosa%20river%20flowing%20through%2C%20thermal%20springs%2C%20authentic%20Albanian%20countryside%2C%20no%20tourists%2C%20pristine%20nature&width=600&height=400&seq=10&orientation=landscape" alt="Permet" class="w-full h-full object-cover">
+                        <div class="city-overlay absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70 transition-opacity duration-300"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-1">Permet</h3>
+                            <p class="text-sm">The city of roses and thermal springs</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">Known for its natural thermal baths, stunning mountain scenery, and traditional Albanian cuisine, Permet offers an authentic rural experience.</p>
+                        <button class="bg-primary text-white px-6 py-2 !rounded-button whitespace-nowrap hover:bg-primary/90 transition-colors">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tourist Attractions Showcase -->
+    <section id="attractions" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6">Top Attractions</h2>
+                <p class="text-lg text-gray-600">Discover the most breathtaking and culturally significant sites across South Albania.</p>
+            </div>
+            
+            <div class="relative">
+                <div class="attraction-carousel flex overflow-x-auto gap-6 pb-8">
+                    <!-- Butrint -->
+                    <div class="min-w-[350px] flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white">
+                        <div class="h-64">
+                            <img src="https://readdy.ai/api/search-image?query=Ancient%20ruins%20of%20Butrint%20archaeological%20site%20in%20Albania%2C%20UNESCO%20World%20Heritage%20site%20with%20Roman%20amphitheater%2C%20Greek%20acropolis%2C%20Byzantine%20basilica%2C%20surrounded%20by%20lush%20vegetation%20and%20lagoon%20waters%2C%20dramatic%20lighting%2C%20no%20people&width=600&height=400&seq=11&orientation=landscape" alt="Butrint" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-800">Butrint</h3>
+                                    <p class="text-sm text-gray-500">Saranda</p>
+                                </div>
+                                <div class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">UNESCO Site</div>
+                            </div>
+                            <p class="text-gray-600 mb-4">An ancient city that was once part of Greek, Roman, Byzantine and Venetian empires, now a UNESCO World Heritage site with remarkably preserved ruins.</p>
+                            <a href="#" class="text-primary font-medium hover:underline">Learn More</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Blue Eye -->
+                    <div class="min-w-[350px] flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white">
+                        <div class="h-64">
+                            <img src="https://readdy.ai/api/search-image?query=The%20Blue%20Eye%20%28Syri%20i%20Kalt%C3%ABr%29%20natural%20spring%20in%20Albania%20with%20incredibly%20clear%20turquoise%20blue%20water%20bubbling%20from%20underground%20source%2C%20surrounded%20by%20lush%20green%20forest%2C%20crystal%20clear%20waters%20with%20vibrant%20blue%20center%2C%20pristine%20nature%2C%20no%20people&width=600&height=400&seq=12&orientation=landscape" alt="Blue Eye" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-800">Blue Eye (Syri i Kaltër)</h3>
+                                    <p class="text-sm text-gray-500">Between Saranda and Gjirokastra</p>
+                                </div>
+                                <div class="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-sm">Natural Wonder</div>
+                            </div>
+                            <p class="text-gray-600 mb-4">A hypnotic natural spring where crystal clear water bubbles from a deep blue pool, surrounded by lush vegetation and pristine nature.</p>
+                            <a href="#" class="text-primary font-medium hover:underline">Learn More</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Gjirokastra Castle -->
+                    <div class="min-w-[350px] flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white">
+                        <div class="h-64">
+                            <img src="https://readdy.ai/api/search-image?query=Imposing%20medieval%20Gjirokastra%20Castle%20fortress%20on%20hilltop%20overlooking%20historic%20city%20in%20Albania%2C%20massive%20stone%20walls%2C%20ancient%20architecture%2C%20dramatic%20mountain%20backdrop%2C%20UNESCO%20World%20Heritage%20site%2C%20golden%20evening%20light%2C%20historic%20atmosphere&width=600&height=400&seq=13&orientation=landscape" alt="Gjirokastra Castle" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-800">Gjirokastra Castle</h3>
+                                    <p class="text-sm text-gray-500">Gjirokastra</p>
+                                </div>
+                                <div class="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm">Historical</div>
+                            </div>
+                            <p class="text-gray-600 mb-4">One of the largest castles in the Balkans, offering panoramic views of the city and housing a fascinating military museum with artifacts from different eras.</p>
+                            <a href="#" class="text-primary font-medium hover:underline">Learn More</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Ksamil Islands -->
+                    <div class="min-w-[350px] flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white">
+                        <div class="h-64">
+                            <img src="https://readdy.ai/api/search-image?query=Paradise-like%20Ksamil%20Islands%20in%20Albania%20with%20crystal%20clear%20turquoise%20waters%2C%20small%20uninhabited%20islands%20with%20white%20sandy%20beaches%2C%20surrounded%20by%20Mediterranean%20vegetation%2C%20aerial%20view%20showing%20the%20incredible%20water%20colors%2C%20perfect%20summer%20destination&width=600&height=400&seq=14&orientation=landscape" alt="Ksamil Islands" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-800">Ksamil Islands</h3>
+                                    <p class="text-sm text-gray-500">Ksamil, near Saranda</p>
+                                </div>
+                                <div class="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-sm">Beach Paradise</div>
+                            </div>
+                            <p class="text-gray-600 mb-4">A group of small islands with white sandy beaches and crystal-clear turquoise waters, often compared to the Caribbean for their stunning beauty.</p>
+                            <a href="#" class="text-primary font-medium hover:underline">Learn More</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Llogara Pass -->
+                    <div class="min-w-[350px] flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white">
+                        <div class="h-64">
+                            <img src="https://readdy.ai/api/search-image?query=Dramatic%20mountain%20road%20through%20Llogara%20Pass%20in%20Albania%20with%20hairpin%20turns%20winding%20through%20majestic%20mountains%2C%20spectacular%20views%20of%20Albanian%20Riviera%20and%20Ionian%20Sea%20below%2C%20ancient%20pine%20trees%20bent%20by%20wind%2C%20dramatic%20clouds%2C%20breathtaking%20landscape&width=600&height=400&seq=15&orientation=landscape" alt="Llogara Pass" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-800">Llogara Pass</h3>
+                                    <p class="text-sm text-gray-500">Between Vlora and Himara</p>
+                                </div>
+                                <div class="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-sm">Scenic Drive</div>
+                            </div>
+                            <p class="text-gray-600 mb-4">A breathtaking mountain pass offering spectacular views of the Albanian Riviera, with winding roads through ancient pine forests and dramatic cliffs.</p>
+                            <a href="#" class="text-primary font-medium hover:underline">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="prev-attraction" class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center z-10 focus:outline-none">
+                    <div class="w-12 h-12 flex items-center justify-center">
+                        <i class="ri-arrow-left-s-line text-gray-600 ri-lg"></i>
+                    </div>
+                </button>
+                
+                <button id="next-attraction" class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center z-10 focus:outline-none">
+                    <div class="w-12 h-12 flex items-center justify-center">
+                        <i class="ri-arrow-right-s-line text-gray-600 ri-lg"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Categories -->
+    <section id="experiences" class="py-20 bg-neutral">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6">Explore by Experience</h2>
+                <p class="text-lg text-gray-600">Discover South Albania through different lenses and find the perfect experiences for your interests.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Historical Sites -->
+                <div class="category-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+                    <div class="h-48 relative">
+                        <img src="https://readdy.ai/api/search-image?query=Ancient%20archaeological%20ruins%20in%20Albania%20with%20Greek%20and%20Roman%20architecture%2C%20columns%2C%20amphitheater%2C%20stone%20walls%2C%20dramatic%20lighting%20highlighting%20historical%20details%2C%20no%20people%2C%20archaeological%20site%20with%20Mediterranean%20backdrop&width=500&height=300&seq=16&orientation=landscape" alt="Historical Sites" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+                            <div class="w-16 h-16 flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-full">
+                                <i class="ri-ancient-gate-line text-white ri-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Historical Sites</h3>
+                        <p class="text-gray-600 mb-4">Explore ancient ruins, medieval castles, and Ottoman architecture that tell the story of Albania's rich past.</p>
+                        <a href="#" class="flex items-center text-primary font-medium hover:underline">
+                            Discover Sites
+                            <div class="w-5 h-5 flex items-center justify-center ml-1">
+                                <i class="ri-arrow-right-line"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Beaches -->
+                <div class="category-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+                    <div class="h-48 relative">
+                        <img src="https://readdy.ai/api/search-image?query=Pristine%20secluded%20beach%20in%20South%20Albania%20with%20crystal%20clear%20turquoise%20waters%2C%20white%20sand%2C%20dramatic%20cliffs%20and%20mountains%20in%20background%2C%20perfect%20blue%20sky%2C%20no%20people%2C%20paradise-like%20setting%20with%20Mediterranean%20vegetation&width=500&height=300&seq=17&orientation=landscape" alt="Beaches" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+                            <div class="w-16 h-16 flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-full">
+                                <i class="ri-ship-line text-white ri-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Beaches</h3>
+                        <p class="text-gray-600 mb-4">Relax on some of Europe's most pristine and uncrowded beaches with crystal-clear turquoise waters.</p>
+                        <a href="#" class="flex items-center text-primary font-medium hover:underline">
+                            Find Beaches
+                            <div class="w-5 h-5 flex items-center justify-center ml-1">
+                                <i class="ri-arrow-right-line"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Cultural Heritage -->
+                <div class="category-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+                    <div class="h-48 relative">
+                        <img src="https://readdy.ai/api/search-image?query=Traditional%20Albanian%20cultural%20festival%20with%20people%20in%20authentic%20colorful%20folk%20costumes%20performing%20traditional%20dances%2C%20musicians%20playing%20traditional%20instruments%2C%20historic%20village%20setting%2C%20authentic%20cultural%20experience%2C%20warm%20evening%20light&width=500&height=300&seq=18&orientation=landscape" alt="Cultural Heritage" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+                            <div class="w-16 h-16 flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-full">
+                                <i class="ri-museum-line text-white ri-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Cultural Heritage</h3>
+                        <p class="text-gray-600 mb-4">Immerse yourself in Albanian traditions, folk music, dance, and authentic local experiences.</p>
+                        <a href="#" class="flex items-center text-primary font-medium hover:underline">
+                            Experience Culture
+                            <div class="w-5 h-5 flex items-center justify-center ml-1">
+                                <i class="ri-arrow-right-line"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Natural Wonders -->
+                <div class="category-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+                    <div class="h-48 relative">
+                        <img src="https://readdy.ai/api/search-image?query=Breathtaking%20natural%20landscape%20in%20Albania%20with%20dramatic%20mountains%2C%20crystal%20clear%20river%20flowing%20through%20canyon%2C%20lush%20green%20forests%2C%20waterfalls%2C%20pristine%20untouched%20wilderness%2C%20no%20people%2C%20perfect%20sunny%20day%20with%20blue%20sky&width=500&height=300&seq=19&orientation=landscape" alt="Natural Wonders" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+                            <div class="w-16 h-16 flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-full">
+                                <i class="ri-plant-line text-white ri-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Natural Wonders</h3>
+                        <p class="text-gray-600 mb-4">Discover breathtaking landscapes, from mountain passes to pristine rivers, canyons, and natural springs.</p>
+                        <a href="#" class="flex items-center text-primary font-medium hover:underline">
+                            Explore Nature
+                            <div class="w-5 h-5 flex items-center justify-center ml-1">
+                                <i class="ri-arrow-right-line"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Map -->
+    <section id="map" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6">Explore South Albania</h2>
+                <p class="text-lg text-gray-600">Navigate through the region's top destinations and plan your perfect itinerary.</p>
+            </div>
+            
+            <div class="relative rounded-lg overflow-hidden shadow-xl h-[600px] bg-cover bg-center" style="background-image: url('https://public.readdy.ai/gen_page/map_placeholder_1280x720.png');">
+                <!-- Map Pins -->
+                <div class="absolute top-[35%] left-[45%] group">
+                    <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center animate-pulse cursor-pointer relative z-10">
+                        <div class="w-4 h-4 bg-white rounded-full"></div>
+                    </div>
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white rounded shadow-lg p-3 w-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <h4 class="font-bold text-gray-800 mb-1">Saranda</h4>
+                        <p class="text-sm text-gray-600">Coastal city with beautiful beaches and access to Butrint</p>
+                    </div>
+                </div>
+                
+                <div class="absolute top-[25%] left-[55%] group">
+                    <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center animate-pulse cursor-pointer relative z-10">
+                        <div class="w-4 h-4 bg-white rounded-full"></div>
+                    </div>
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white rounded shadow-lg p-3 w-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <h4 class="font-bold text-gray-800 mb-1">Gjirokastra</h4>
+                        <p class="text-sm text-gray-600">UNESCO World Heritage city with Ottoman architecture</p>
+                    </div>
+                </div>
+                
+                <div class="absolute top-[30%] left-[30%] group">
+                    <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center animate-pulse cursor-pointer relative z-10">
+                        <div class="w-4 h-4 bg-white rounded-full"></div>
+                    </div>
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white rounded shadow-lg p-3 w-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <h4 class="font-bold text-gray-800 mb-1">Vlora</h4>
+                        <p class="text-sm text-gray-600">Coastal city where the Adriatic meets the Ionian Sea</p>
+                    </div>
+                </div>
+                
+                <div class="absolute top-[40%] left-[38%] group">
+                    <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center animate-pulse cursor-pointer relative z-10">
+                        <div class="w-4 h-4 bg-white rounded-full"></div>
+                    </div>
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white rounded shadow-lg p-3 w-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <h4 class="font-bold text-gray-800 mb-1">Himara</h4>
+                        <p class="text-sm text-gray-600">Charming coastal town with beautiful beaches</p>
+                    </div>
+                </div>
+                
+                <div class="absolute top-[20%] left-[40%] group">
+                    <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center animate-pulse cursor-pointer relative z-10">
+                        <div class="w-4 h-4 bg-white rounded-full"></div>
+                    </div>
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white rounded shadow-lg p-3 w-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <h4 class="font-bold text-gray-800 mb-1">Berat</h4>
+                        <p class="text-sm text-gray-600">UNESCO site known as the city of a thousand windows</p>
+                    </div>
+                </div>
+                
+                <div class="absolute top-[45%] left-[50%] group">
+                    <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center animate-pulse cursor-pointer relative z-10">
+                        <div class="w-4 h-4 bg-white rounded-full"></div>
+                    </div>
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white rounded shadow-lg p-3 w-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <h4 class="font-bold text-gray-800 mb-1">Blue Eye Spring</h4>
+                        <p class="text-sm text-gray-600">Natural wonder with crystal clear blue water</p>
+                    </div>
+                </div>
+                
+                <div class="absolute top-[50%] left-[45%] group">
+                    <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center animate-pulse cursor-pointer relative z-10">
+                        <div class="w-4 h-4 bg-white rounded-full"></div>
+                    </div>
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white rounded shadow-lg p-3 w-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <h4 class="font-bold text-gray-800 mb-1">Butrint</h4>
+                        <p class="text-sm text-gray-600">UNESCO ancient city with Greek and Roman ruins</p>
+                    </div>
+                </div>
+                
+                <div class="absolute top-[35%] left-[35%] group">
+                    <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center animate-pulse cursor-pointer relative z-10">
+                        <div class="w-4 h-4 bg-white rounded-full"></div>
+                    </div>
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white rounded shadow-lg p-3 w-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <h4 class="font-bold text-gray-800 mb-1">Llogara Pass</h4>
+                        <p class="text-sm text-gray-600">Breathtaking mountain pass with spectacular views</p>
+                    </div>
+                </div>
+                
+                <!-- Map Controls -->
+                <div class="absolute bottom-6 right-6 flex flex-col space-y-2">
+                    <button class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center">
+                        <div class="w-10 h-10 flex items-center justify-center">
+                            <i class="ri-add-line text-gray-600"></i>
+                        </div>
+                    </button>
+                    <button class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center">
+                        <div class="w-10 h-10 flex items-center justify-center">
+                            <i class="ri-subtract-line text-gray-600"></i>
+                        </div>
+                    </button>
+                </div>
+                
+                <!-- Map Legend -->
+                <div class="absolute bottom-6 left-6 bg-white rounded-lg shadow-lg p-4">
+                    <h4 class="font-bold text-gray-800 mb-3">Map Legend</h4>
+                    <div class="space-y-2">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-primary rounded-full mr-2"></div>
+                            <span class="text-sm text-gray-600">Cities</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-accent rounded-full mr-2"></div>
+                            <span class="text-sm text-gray-600">Attractions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 bg-primary">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="mb-8 md:mb-0 md:mr-8 text-center md:text-left">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Explore South Albania?</h2>
+                    <p class="text-white/80 text-lg max-w-xl">Plan your unforgettable journey to one of Europe's last undiscovered treasures. Subscribe for travel tips and exclusive offers.</p>
+                </div>
+                
+                <div class="w-full md:w-auto">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <input type="email" placeholder="Your email address" class="px-6 py-3 rounded-button border-none focus:outline-none focus:ring-2 focus:ring-white/30 text-gray-800 w-full sm:w-64">
+                        <button class="bg-white text-primary font-medium px-6 py-3 !rounded-button whitespace-nowrap hover:bg-white/90 transition-colors">Subscribe Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <a href="#" class="text-3xl font-['Pacifico'] text-white mb-6 inline-block">Discover Albania</a>
+                    <p class="text-gray-400 mb-6">Experience the hidden gem of Europe with pristine beaches, rich history, and authentic Mediterranean culture.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                            <div class="w-10 h-10 flex items-center justify-center">
+                                <i class="ri-facebook-fill text-white"></i>
+                            </div>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                            <div class="w-10 h-10 flex items-center justify-center">
+                                <i class="ri-instagram-fill text-white"></i>
+                            </div>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                            <div class="w-10 h-10 flex items-center justify-center">
+                                <i class="ri-twitter-x-fill text-white"></i>
+                            </div>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                            <div class="w-10 h-10 flex items-center justify-center">
+                                <i class="ri-youtube-fill text-white"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">Destinations</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Vlora</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Saranda</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Gjirokastra</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Himara</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Berat</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Permet</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">Experiences</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Historical Sites</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Beaches</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Cultural Heritage</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Natural Wonders</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Gastronomy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Adventure</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">Contact Us</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3 mt-1">
+                                <i class="ri-map-pin-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-400">Rruga Ismail Qemali, Tirana, Albania</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3 mt-1">
+                                <i class="ri-phone-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-400">+355 69 123 4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3 mt-1">
+                                <i class="ri-mail-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-400">info@discoversouthalbania.com</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-6">
+                        <h3 class="text-lg font-bold mb-4">Payment Methods</h3>
+                        <div class="flex space-x-3">
+                            <div class="w-10 h-6 flex items-center justify-center">
+                                <i class="ri-visa-fill text-gray-400 ri-lg"></i>
+                            </div>
+                            <div class="w-10 h-6 flex items-center justify-center">
+                                <i class="ri-mastercard-fill text-gray-400 ri-lg"></i>
+                            </div>
+                            <div class="w-10 h-6 flex items-center justify-center">
+                                <i class="ri-paypal-fill text-gray-400 ri-lg"></i>
+                            </div>
+                            <div class="w-10 h-6 flex items-center justify-center">
+                                <i class="ri-apple-fill text-gray-400 ri-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">© 2025 Discover South Albania. All rights reserved.</p>
+                
+                <div class="flex items-center">
+                    <div class="flex mr-6">
+                        <button class="flex items-center text-gray-400 hover:text-white transition-colors">
+                            <span>English</span>
+                            <div class="w-5 h-5 flex items-center justify-center ml-1">
+                                <i class="ri-arrow-down-s-line"></i>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 text-sm hover:text-white transition-colors">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 text-sm hover:text-white transition-colors">Terms of Service</a>
+                        <a href="#" class="text-gray-400 text-sm hover:text-white transition-colors">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Attraction Carousel Navigation
+            const carousel = document.querySelector('.attraction-carousel');
+            const prevBtn = document.getElementById('prev-attraction');
+            const nextBtn = document.getElementById('next-attraction');
+            
+            prevBtn.addEventListener('click', function() {
+                carousel.scrollBy({ left: -380, behavior: 'smooth' });
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                carousel.scrollBy({ left: 380, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
